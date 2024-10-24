@@ -1,0 +1,49 @@
+Description: "Plantilla para crear un bucket S3 y dos instancias EC2 en AWS."
+
+Resources:
+  S3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties: 
+      BucketName: !Sub "bucket-gianpc-${AWS::AccountId}-${AWS::Region}"
+      AccessControl: Private
+      VersioningConfiguration:
+        Status: Enabled
+
+  EC2Instance1:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      AvailabilityZone: "us-east-1a"
+      DisableApiTermination: false
+      ImageId: "ami-0e472ba40eb589f49"
+      InstanceType: "t2.micro" 
+      InstanceInitiatedShutdownBehavior: "stop"
+      KeyName: "demo_par_claves"
+      Monitoring: false
+      Tags:
+        - Key: "Name"
+          Value: "Instancia-1" 
+
+  EC2Instance2:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      AvailabilityZone: "us-east-1a"
+      DisableApiTermination: false
+      ImageId: "ami-0e472ba40eb589f49"
+      InstanceType: "t2.micro"
+      InstanceInitiatedShutdownBehavior: "stop"
+      KeyName: "demo_par_claves" 
+      Monitoring: false
+      Tags:
+        - Key: "Name"
+          Value: "Instancia-2" 
+
+Outputs:
+  BucketName:
+    Description: "Nombre del bucket S3"
+    Value: !Ref S3Bucket
+  Instance1Id:
+    Description: "ID de la primera instancia EC2"
+    Value: !Ref EC2Instance1
+  Instance2Id:
+    Description: "ID de la segunda instancia EC2"
+    Value: !Ref EC2Instance2

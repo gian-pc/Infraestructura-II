@@ -1,0 +1,75 @@
+Description: "Plantilla para crear instancias EC2 en los tres ambientes: Producción, Desarrollo, y Testing."
+
+Mappings:
+  EnvironmentToInstanceType:
+    Production:
+      InstanceType: "t2.micro"
+      ImageId: "ami-042e8287309f5df03"  # AMI de Linux para Producción y Testing
+    Testing:
+      InstanceType: "t2.micro"
+      ImageId: "ami-042e8287309f5df03"  # AMI de Linux para Producción y Testing
+    Development:
+      InstanceType: "t1.micro"
+      ImageId: "ami-0b69ea66ff7391e80"  # AMI de Windows para Desarrollo
+
+Resources:
+  EC2InstanceProduction:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      AvailabilityZone: "us-east-1a"
+      InstanceType: !FindInMap [EnvironmentToInstanceType, Production, InstanceType]
+      ImageId: !FindInMap [EnvironmentToInstanceType, Production, ImageId]
+      KeyName: "demo_par_claves"
+      Monitoring: false
+      InstanceInitiatedShutdownBehavior: "stop"
+      DisableApiTermination: false
+      Tags:
+        - Key: "Name"
+          Value: "EC2-Production"
+        - Key: "Environment"
+          Value: "Production"
+
+  EC2InstanceDevelopment:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      AvailabilityZone: "us-east-1a"
+      InstanceType: !FindInMap [EnvironmentToInstanceType, Development, InstanceType]
+      ImageId: !FindInMap [EnvironmentToInstanceType, Development, ImageId]
+      KeyName: "demo_par_claves"
+      Monitoring: false
+      InstanceInitiatedShutdownBehavior: "stop"
+      DisableApiTermination: false
+      Tags:
+        - Key: "Name"
+          Value: "EC2-Development"
+        - Key: "Environment"
+          Value: "Development"
+
+  EC2InstanceTesting:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      AvailabilityZone: "us-east-1a"
+      InstanceType: !FindInMap [EnvironmentToInstanceType, Testing, InstanceType]
+      ImageId: !FindInMap [EnvironmentToInstanceType, Testing, ImageId]
+      KeyName: "demo_par_claves"
+      Monitoring: false
+      InstanceInitiatedShutdownBehavior: "stop"
+      DisableApiTermination: false
+      Tags:
+        - Key: "Name"
+          Value: "EC2-Testing"
+        - Key: "Environment"
+          Value: "Testing"
+
+Outputs:
+  ProductionInstanceId:
+    Description: "ID de la instancia EC2 de Producción"
+    Value: !Ref EC2InstanceProduction
+
+  DevelopmentInstanceId:
+    Description: "ID de la instancia EC2 de Desarrollo"
+    Value: !Ref EC2InstanceDevelopment
+
+  TestingInstanceId:
+    Description: "ID de la instancia EC2 de Testing"
+    Value: !Ref EC2InstanceTesting
