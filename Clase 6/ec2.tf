@@ -2,9 +2,6 @@ resource "aws_instance" "instance_1a" {
   ami                     = "ami-0aa7d40eeae50c9a9"
   instance_type           = "t2.micro"
   subnet_id = aws_subnet.public_subnet_1a.id
-
-  vpc_security_group_ids = [aws_security_group.sg_public_instance.id]
-
   tags = {
     Name = "Instance_1a"
   }
