@@ -13,3 +13,8 @@ variable "tags" {
   type = map(string)
   
 }
+
+variable "sg_ingress_cidr" {
+  description = "CIDR para tráfico de entrada"
+  type = string
+}
